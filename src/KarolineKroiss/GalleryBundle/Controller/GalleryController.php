@@ -15,18 +15,17 @@ class GalleryController extends Controller
      */
     public function showByTypeAndYearAction($type, $year)
     {
-        $galleries = $this->getGalleryRepository()->findByTypeAndYear($type, $year);
-        $images = $this->getImages($galleries);
+        $gallery = $this->getGalleryRepository()->findByTypeAndYear($type, $year);
 
         return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', [
-            'images' => $images,
-            'type' => $this->mapTypeToName($type),
+            'gallery' => $gallery,
+            'type' => $this->mapTypeToName($gallery->getType()),
             'similarImages' => false
         ]);
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showSimilarAction($id)

@@ -25,7 +25,7 @@ class GalleryRepository extends EntityRepository
     /**
      * @param $type
      * @param $year
-     * @return array
+     * @return \KarolineKroiss\GalleryBundle\Entity\Gallery
      */
     public function findByTypeAndYear($type, $year)
     {
@@ -38,7 +38,7 @@ class GalleryRepository extends EntityRepository
             ->setParameter('galleryDateEnd', $year)
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
