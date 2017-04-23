@@ -1,7 +1,4 @@
 actor: Tester
-include:
-  - src/KarolineKroiss/WebPageBundle
-
 paths:
     tests: tests
     log: tests/_output
