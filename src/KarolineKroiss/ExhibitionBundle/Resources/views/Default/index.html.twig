@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        {% for exhibition in exhibitions %}
+            <div class="exhibition">
+                <h1>{{ exhibition.name }}</h1>
+                <p>{{ exhibition.year|date('Y') }} <a href="http://{{ exhibition.link }}" target="_blank">Link zur Galerie "{{ exhibition.gallery }}"</a></p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+services:
+    admin.cms:
+            class: KarolineKroiss\WebPageBundle\Admin\CmsAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Inhalte", label: "Inhalte" }
+            arguments:
+                - ~
+                - KarolineKroiss\WebPageBundle\Entity\CmsPage
+                - ~
+            calls:
+                - [ setTranslationDomain, [KarolineKroissWebPageBundle]]
+
+

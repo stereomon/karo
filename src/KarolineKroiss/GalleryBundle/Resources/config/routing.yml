@@ -1,0 +1,11 @@
+karoline_kroiss_gallery_homepage:
+  path: /
+  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:firstGallery }
+
+karoline_kroiss_gallery_by_year:
+  path:  /bilder/{type}/{year}
+  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showByTypeAndYear }
+
+karoline_kroiss_gallery_by_type:
+  path:  /bilder/{id}
+  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showSimilar }

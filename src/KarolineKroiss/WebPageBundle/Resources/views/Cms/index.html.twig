@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block gallery %}
+    {% if page %}
+        <div style="padding: 20px 0">
+            {% autoescape false %}
+                {{ page.content }}
+            {% endautoescape %}
+        </div>
+    {% else %}
+        <p>Seite "{{ name }}" nicht gefunden.</p>
+    {% endif %}
+{% endblock %}

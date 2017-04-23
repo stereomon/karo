@@ -1,0 +1,25 @@
+imports:
+    - { resource: config.yml }
+
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: 'db678903198.db.1and1.com'
+        port: '3306'
+        dbname: 'db678903198'
+        user: 'dbo678903198'
+        password: 'arg7G=bv72mP95'
+        charset: UTF8
+
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested
+        nested:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        console:
+            type: console

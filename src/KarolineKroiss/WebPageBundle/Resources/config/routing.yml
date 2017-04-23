@@ -1,0 +1,11 @@
+karoline_kroiss_web_page_bundle_contact:
+    path:  /kontakt
+    defaults: { _controller: KarolineKroissWebPageBundle:Cms:contact }
+
+karoline_kroiss_web_page_bundle_vita:
+    path:  /lebenslauf
+    defaults: { _controller: KarolineKroissWebPageBundle:Cms:vita }
+
+karoline_kroiss_web_page_bundle_imprint:
+    path:  /impressum
+    defaults: { _controller: KarolineKroissWebPageBundle:Cms:imprint }

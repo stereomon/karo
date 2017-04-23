@@ -1,0 +1,20 @@
+.jcrop-holder #preview-pane-new,
+.jcrop-holder #preview-pane-current {
+    display: block;
+    position: absolute;
+    z-index: 2000;
+    top: -18px;
+    right: -280px;
+    padding: 6px;
+}
+.jcrop-holder #preview-pane-current {
+    top: 200px;
+    right: -300px;
+}
+
+#preview-pane-new .preview-container,
+#preview-pane-current .current-preview-container {
+    width: 65px;
+    height: 65px;
+    overflow: hidden;
+}

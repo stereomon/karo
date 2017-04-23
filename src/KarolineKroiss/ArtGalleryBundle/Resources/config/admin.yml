@@ -1,0 +1,13 @@
+services:
+    admin.art-gallery:
+            class: KarolineKroiss\ArtGalleryBundle\Admin\GalleryAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Kunst Galerien", label: "Kunst Galerien" }
+            arguments:
+                - ~
+                - KarolineKroiss\ArtGalleryBundle\Entity\Gallery
+                - ~
+            calls:
+                - [ setTranslationDomain, [KarolineKroissArtGalleryBundle]]
+
+

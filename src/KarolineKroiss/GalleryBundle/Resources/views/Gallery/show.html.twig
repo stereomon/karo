@@ -1,0 +1,82 @@
+{% extends '::base.html.twig' %}
+
+{% block gallery %}
+
+    <script src="{{ asset('bundles/karolinekroissgallery/js/gallery.js') }}"></script>
+    <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/css/gallery.css') }}" />
+
+    <div id="image-gallery">
+        <div id="info-text">
+            <div id="left">
+            </div>
+            <div id="right">
+                {% if similarImages is defined %}
+                    <p>Ähnliche Bilder</p>
+                {% else %}
+                    <p>&nbsp;</p>
+                {% endif %}
+            </div>
+        </div>
+        <div id="slideshow-container">
+            <div id="slideshow" class="slideshow">
+                <ul>
+                    {% set firstImage = true %}
+                    {% for image in gallery.images %}
+                        <li>
+                            {% if image.pinterestLink or image.saatchiLink %}
+                            <div id="social-link-container">
+                                {% if image.saatchiLink %}
+                                    <a href="{{ image.saatchiLink }}" id="saatchi-link" class="social-link">
+                                        <img src="{{ asset('bundles/karolinekroissgallery/images/saatchi.png') }}" />
+                                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&description={{ image.title }}" data-pin-do="buttonPin" data-pin-shape="round" data-pin-height="32" id="pinterest-link"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" /></a>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% if firstImage %}
+                            {% set firstImage = false %}
+                                <span id="active-image" data-id="{{ image.id }}"></span>
+                            {% endif %}
+                            <div data-id="{{ image.id }}" class="image-container" style="display: none">
+                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">
+                                    <img src="{{ image.previewPath }}" alt="{{ image.title }}" />
+                                </a>
+                                {% if image.technic or image.size or image.year %}
+                                    <div class="description">
+                                        {% if image.title %}
+                                            {{ image.title }} &middot;
+                                        {% endif %}
+                                        {% if image.technic %}
+                                            {{ image.technic }} &middot;
+                                        {% endif %}
+                                        {% if image.size %}
+                                            {{ image.size }} &middot;
+                                        {% endif %}
+                                        {% if image.year %}
+                                            {{ image.year }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                <a href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">Zeige ähnliche Bilder</a>
+                            </div>
+
+
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+        <div id="navigation-container">
+            <ul>
+            {% for image in gallery.images %}
+                <li>
+                    <img class="thumb" src="{{ image.thumbnailPath }}" alt="{{ image.title }}" data-id="{{ image.id }}" />
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+{% endblock %}

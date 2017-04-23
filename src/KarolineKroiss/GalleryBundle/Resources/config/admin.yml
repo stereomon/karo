@@ -1,0 +1,44 @@
+#sonata_admin:
+#    title:      Karo's Admin Area
+#    title_logo: bundles/sonataadmin/logo_title.png
+#    options:
+#        title_mode: 'single_text'
+#    templates:
+#        show:       KarolineKroissGalleryBundle:Admin:show.html.twig
+
+services:
+    admin.gallery:
+        class: KarolineKroiss\GalleryBundle\Admin\GalleryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Galerien" }
+        arguments:
+            - ~
+            - KarolineKroiss\GalleryBundle\Entity\Gallery
+            - ~
+        calls:
+            - [ setTranslationDomain, [KarolineKroissGalleryBundle]]
+
+    admin.gallery.image:
+        class: KarolineKroiss\GalleryBundle\Admin\GalleryImageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Bilder" }
+        arguments:
+            - ~
+            - KarolineKroiss\GalleryBundle\Entity\GalleryImage
+            - KarolineKroissGalleryBundle:GalleryImageCrud
+        calls:
+            - [ setTranslationDomain, [KarolineKroissGalleryBundle]]
+            - [ setTemplate, [show, KarolineKroissGalleryBundle:Admin:show.html.twig]]
+
+    admin.gallery.image.theme:
+        class: KarolineKroiss\GalleryBundle\Admin\GalleryImageThemeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Bild Typ" }
+        arguments:
+            - ~
+            - KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme
+            - ~
+        calls:
+            - [ setTranslationDomain, [KarolineKroissGalleryBundle]]
+
+

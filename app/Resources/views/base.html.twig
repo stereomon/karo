@@ -1,0 +1,118 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Karoline Kroiß{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroisswebpage/bootstrap/css/bootstrap.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroisswebpage/css/layout.css') }}" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="{{ asset('bundles/karolinekroisswebpage/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+        <style>
+            header, nav, #content {
+                width: 960px;
+                margin: 0 auto;
+            }
+            #content {
+                padding: 0 15px;
+            }
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+            #slideshow-container,
+            #info-text #left {
+                width: 540px;
+                float: left;
+                margin: 0 27px 0 0;
+            }
+            #navigation-container ul {
+                float: right;
+                width: 284px;
+            }
+            #slideshow-container img {
+                width: 560px;
+            }
+            #navigation-container li {
+                height: 65px;
+                width: 65px;
+                float: left;
+                margin: 0 0 6px 6px;
+                overflow: hidden;
+            }
+            #navigation-container img {
+                cursor: pointer;
+            }
+            #image-gallery {
+                margin: 0 0 20px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <section id="main">
+            <header>
+                <h1><a href="{{ path('karoline_kroiss_gallery_homepage') }}">Karoline Kroiß</a></h1>
+            </header>
+            <section id="navigation-bar">
+                <nav>
+                    {{ knp_menu_render('KarolineKroissWebPageBundle:Builder:mainMenu') }}
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <div id="login-logout">
+                            {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+                            <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                        </div>
+                    {% endif %}
+                </nav>
+            </section>
+
+            <section id="content">
+                <section>
+                    {% block gallery %}
+                        <div style="margin: 0 15px">
+                            {% block body %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+                </section>
+                <div style="clear: both"></div>
+            </section>
+            {% block footer %}
+            <footer>
+                <section>
+                    <section class="col-md-6">
+                        <ul id="footer-nav">
+                            <li><a href="{{ path('karoline_kroiss_web_page_bundle_contact') }}">Kontakt</a></li>
+                            <li>|</li>
+                            <li><a href="{{ path('karoline_kroiss_web_page_bundle_vita') }}">Lebenslauf</a></li>
+                            <li>|</li>
+                            <li><a href="{{ path('karoline_kroiss_web_page_bundle_imprint') }}">Impressum</a></li>
+                        </ul>
+                    </section>
+                    <section class="col-md-6">
+                        <ul id="third-party-links" class="pull-right">
+                            <li><a href="http://www.saatchiart.com/karolinekroiss" target="_blank">
+                                <img src="{{ asset('bundles/karolinekroisswebpage/images/saatchiart-logo.png') }}" height="20px">
+                            </a></li>
+                            <li><div id="fb-root"></div>
+                                <script>(function(d, s, id) {
+                                        var js, fjs = d.getElementsByTagName(s)[0];
+                                        if (d.getElementById(id)) return;
+                                        js = d.createElement(s); js.id = id;
+                                        js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1&appId=238836639629736";
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));</script><div class="fb-like" data-href="https://www.facebook.com/pages/Karoline-Kroi&#xdf;/" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div></li>
+                            <li><a data-pin-do="buttonFollow" href="http://www.pinterest.com/karolinekroiss/">Karoline Kroiß</a>
+                                <!-- Please call pinit.js only once per page -->
+                                <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script></li>
+                        </ul>
+                    </section>
+                </section>
+            </footer>
+            {% endblock footer %}
+        </section>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,3 @@
+karoline_kroiss_exhibition_homepage:
+    path:  /ausstellungen
+    defaults: { _controller: KarolineKroissExhibitionBundle:Default:index }

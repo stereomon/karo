@@ -1,0 +1,79 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{% block actions %}
+    <div class="sonata-actions btn-group">
+        {% include 'SonataAdminBundle:Button:edit_button.html.twig' %}
+        {% include 'SonataAdminBundle:Button:history_button.html.twig' %}
+        {% include 'SonataAdminBundle:Button:create_button.html.twig' %}
+        {% include 'SonataAdminBundle:Button:list_button.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active'}, 'list') }}{% endblock %}
+
+{% block show %}
+    <div class="sonata-ba-view">
+
+        {{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
+
+
+        <script src="{{ asset('bundles/karolinekroissgallery/js/jcrop/js/jquery.Jcrop.js') }}"></script>
+        <script src="{{ asset('bundles/karolinekroissgallery/js/admin/gallery.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/js/jcrop/demo_files/main.css') }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/js/jcrop/demo_files/demo.css') }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/js/jcrop/css/jquery.Jcrop.css') }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/css/admin/gallery.css') }}" type="text/css"/>
+
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="jc-demo-box">
+
+                        <img src="{{ object.previewPath }}" id="target" alt="preview image"/>
+
+                        <div>
+                            <div id="preview-pane-new">
+                                <h4>Neues Vorschaubild</h4>
+                                <div class="preview-container">
+                                    <img src="{{ object.webPath }}" class="jcrop-preview" alt="Preview"/>
+                                </div>
+                            </div>
+
+                            <div id="preview-pane-current">
+                                <h4>Aktuelles Vorschaubild</h4>
+
+                                <div class="current-preview-container">
+                                    <img src="{{ object.thumbnailPath }}" class="current-preview" alt="Preview"/>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="{{ admin.generateUrl('crop') }}" method="post" onsubmit="return checkCoords();">
+                            <input type="hidden" id="x" name="x"/>
+                            <input type="hidden" id="y" name="y"/>
+                            <input type="hidden" id="w" name="w"/>
+                            <input type="hidden" id="h" name="h"/>
+                            <input type="hidden" name="imageId" value="{{ object.id }}"/>
+                            <input type="submit" value="Crop Image" class="btn btn-large btn-inverse"/>
+                        </form>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,4 @@
+karoline_kroiss_art_gallery_homepage:
+    path:  /galerien
+    defaults: { _controller: KarolineKroissArtGalleryBundle:Gallery:list }
+

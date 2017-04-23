@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        {% if galleries %}
+            {% for gallery in galleries %}
+                <div class="gallery">
+                    <h1></h1>
+                    <p><a href="//{{ gallery.link }}" target="_blank">{{ gallery.name }}</a></p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Leider keine Galerien gefunden</p>
+        {% endif %}
+    </div>
+{% endblock %}

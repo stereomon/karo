@@ -1,0 +1,8 @@
+parameters:
+#    karoline_kroiss_gallery.example.class: KarolineKroiss\GalleryBundle\Example
+
+services:
+  karolinekroiss_gallerybundle_gallery:
+    class: KarolineKroiss\GalleryBundle\Form\GalleryImageType
+    tags:
+      - { name: form.type, alias: karolinekroiss_gallerybundle_gallery }
