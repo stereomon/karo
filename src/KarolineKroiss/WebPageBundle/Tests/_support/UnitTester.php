@@ -1,5 +1,6 @@
 <?php
 
+namespace WebPageBundle;
 
 /**
  * Inherited Methods
@@ -18,9 +19,7 @@
 */
 class UnitTester extends \Codeception\Actor
 {
+
     use _generated\UnitTesterActions;
 
-   /**
-    * Define custom actions here
-    */
 }

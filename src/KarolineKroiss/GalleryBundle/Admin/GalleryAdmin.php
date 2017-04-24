@@ -90,9 +90,9 @@ class GalleryAdmin extends AbstractAdmin
         if ($this->isHomepageGallery($gallery)) {
             $galleryRepository = $this->getGalleryRepository();
             $homePageGallery = $galleryRepository->getHomepageGallery();
-            if ($homePageGallery) {
+            if ($homePageGallery && $homePageGallery->getId() !== $gallery->getId()) {
                 $homePageGallery->setIsHomepageGallery(false);
-                $galleryRepository->saveGallery($gallery);
+                $galleryRepository->saveGallery($homePageGallery);
             }
         }
     }

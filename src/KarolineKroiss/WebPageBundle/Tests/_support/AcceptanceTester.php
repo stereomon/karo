@@ -1,5 +1,6 @@
 <?php
 
+namespace WebPageBundle;
 
 /**
  * Inherited Methods

@@ -5,8 +5,6 @@ namespace KarolineKroiss\WebPageBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CmsPage
- *
  * @ORM\Table(name="cms_page")
  * @ORM\Entity(repositoryClass="KarolineKroiss\WebPageBundle\Entity\CmsPageRepository")
  */
