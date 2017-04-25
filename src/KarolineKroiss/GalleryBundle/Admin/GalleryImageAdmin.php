@@ -18,7 +18,6 @@ class GalleryImageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $image = $this->getSubject();
         $formMapper
             ->with('Bild')
                 ->add('gallery', 'entity', [
@@ -30,7 +29,7 @@ class GalleryImageAdmin extends AbstractAdmin
                     'class' => 'KarolineKroissGalleryBundle:GalleryImageTheme',
                     'choice_label' => 'name',
                     'multiple'  => false,
-                    'label' => 'Bild Typ'
+                    'label' => 'Thema'
                 ])
                 ->add('title', 'text', [
                     'label' => 'Titel'
@@ -40,8 +39,10 @@ class GalleryImageAdmin extends AbstractAdmin
                     'required' => false,
                     'data_class' => null
                 ])
-                ->add('technic', 'text', [
-                    'label' => 'Technik',
+                ->add('gallery_image_technique', 'entity', [
+                    'class' => 'KarolineKroissGalleryBundle:GalleryImageTechnique',
+                    'choice_label' => 'technique',
+                    'multiple'  => false,
                     'required' => false
                 ])
                 ->add('size', 'text', [
@@ -61,43 +62,62 @@ class GalleryImageAdmin extends AbstractAdmin
                     'label' => 'Pinterest-Link',
                     'required' => false
                 ])
+                ->add('isSold', 'checkbox', [
+                    'label' => 'Verkauft',
+                    'required' => false,
+                ])
             ->end()
         ;
     }
 
-    //Fields to be shown on filter forms
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
+     *
+     * @return void
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
             ->add('gallery.name', null, ['label' => 'Galerie'])
-            ->add('galleryImageTheme.name', null, ['label' => 'Bild Typ'])
+            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
             ->add('title', null, ['label' => 'Titel'])
-            ->add('technic', null, ['label' => 'Technik'])
+            ->add('galleryImageTechnique.technique', null, ['label' => 'Technik'])
             ->add('size', null, ['label' => 'Größe (B x H x T)'])
             ->add('year', null, ['label' => 'Datum', 'choices' => $this->getYearChoices()])
             ->add('saatchiLink', null, ['label' => 'Saatchi-Link'])
             ->add('pinterestLink', null, ['label' => 'Pinterest-Link'])
+            ->add('isSold', null, ['label' => 'Verkauft'])
         ;
     }
 
+    /**
+     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
+     *
+     * @return void
+     */
     protected function configureShowFields(ShowMapper $showMapper)
     {
 //        echo '<pre>' . PHP_EOL . var_dump($showMapper->getAdmin()->getSubject()) . PHP_EOL . 'Line: ' . __LINE__ . PHP_EOL . 'File: ' . __FILE__ . die();
     }
 
-    //Fields to be shown on lists
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
+     *
+     * @return void
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('id')
             ->add('gallery.name', null, ['label' => 'Galerie'])
-            ->add('galleryImageTheme.name', null, ['label' => 'Bild Typ'])
+            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
             ->add('title', null, ['label' => 'Titel'])
-            ->add('technic', null, ['label' => 'Technik'])
+            ->add('galleryImageTechnique.technique', null, ['label' => 'Technik'])
             ->add('size', null, ['label' => 'Größe (B x H x T)'])
             ->add('year', null, ['label' => 'Datum', 'choices' => $this->getYearChoices()])
             ->add('saatchiLink', null, ['label' => 'Saatchi-Link'])
             ->add('pinterestLink', null, ['label' => 'Pinterest-Link'])
+            ->add('isSold', null, ['label' => 'Verkauft'])
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

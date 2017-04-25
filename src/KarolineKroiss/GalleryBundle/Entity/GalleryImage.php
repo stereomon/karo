@@ -44,6 +44,7 @@ class GalleryImage
 
     /**
     * @var Gallery
+     *
     * @ORM\ManyToOne(targetEntity="KarolineKroiss\GalleryBundle\Entity\Gallery", inversedBy="images")
     * @ORM\JoinColumn(name="gallery", referencedColumnName="id", unique=false)
     */
@@ -51,6 +52,7 @@ class GalleryImage
 
     /**
     * @var GalleryImageTheme
+     *
     * @ORM\ManyToOne(targetEntity="KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme")
     * @ORM\JoinColumn(name="gallery_image_theme", referencedColumnName="id", unique=false)
     */
@@ -64,11 +66,12 @@ class GalleryImage
     private $title;
 
     /**
-     * @var string
+     * @var \KarolineKroiss\GalleryBundle\Entity\GalleryImageTechnique
      *
-     * @ORM\Column(name="technic", type="string", length=64, nullable=true)
+     * @ORM\ManyToOne(targetEntity="KarolineKroiss\GalleryBundle\Entity\GalleryImageTechnique")
+     * @ORM\JoinColumn(name="gallery_image_technique", referencedColumnName="id", unique=false)
      */
-    private $technic;
+    private $galleryImageTechnique;
 
     /**
      * @var string
@@ -114,6 +117,33 @@ class GalleryImage
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updated;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_sold", type="boolean")
+     */
+    private $isSold = false;
+
+    /**
+     * @return bool
+     */
+    public function getIsSold()
+    {
+        return $this->isSold;
+    }
+
+    /**
+     * @param bool $isSold
+     *
+     * @return $this
+     */
+    public function setIsSold($isSold)
+    {
+        $this->isSold = $isSold;
+
+        return $this;
+    }
 
     /**
      * Get id
@@ -174,11 +204,13 @@ class GalleryImage
 
     /**
      * @param GalleryImageTheme $galleryImageTheme
+     *
      * @return $this
      */
     public function setGalleryImageTheme(GalleryImageTheme $galleryImageTheme)
     {
         $this->galleryImageTheme = $galleryImageTheme;
+
         return $this;
     }
 
@@ -191,10 +223,9 @@ class GalleryImage
     }
 
     /**
-     * Set title
-     *
      * @param string $title
-     * @return Gallery
+     *
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -204,8 +235,6 @@ class GalleryImage
     }
 
     /**
-     * Get title
-     *
      * @return string
      */
     public function getTitle()
@@ -214,33 +243,29 @@ class GalleryImage
     }
 
     /**
-     * Set technic
+     * @param GalleryImageTechnique $technique
      *
-     * @param string $technic
-     * @return Gallery
+     * @return $this
      */
-    public function setTechnic($technic)
+    public function setGalleryImageTechnique(GalleryImageTechnique $technique)
     {
-        $this->technic = $technic;
+        $this->galleryImageTechnique = $technique;
 
         return $this;
     }
 
     /**
-     * Get technic
-     *
-     * @return string
+     * @return GalleryImageTechnique
      */
-    public function getTechnic()
+    public function getGalleryImageTechnique()
     {
-        return $this->technic;
+        return $this->galleryImageTechnique;
     }
 
     /**
-     * Set size
-     *
      * @param string $size
-     * @return Gallery
+     *
+     * @return $this
      */
     public function setSize($size)
     {
@@ -250,8 +275,6 @@ class GalleryImage
     }
 
     /**
-     * Get size
-     *
      * @return string
      */
     public function getSize()
@@ -260,10 +283,9 @@ class GalleryImage
     }
 
     /**
-     * Set year
-     *
      * @param string $year
-     * @return Gallery
+     *
+     * @return $this
      */
     public function setYear($year)
     {
@@ -273,8 +295,6 @@ class GalleryImage
     }
 
     /**
-     * Get year
-     *
      * @return string
      */
     public function getYear()
@@ -283,7 +303,8 @@ class GalleryImage
     }
 
     /**
-     * @param $saatchiLink
+     * @param string $saatchiLink
+     *
      * @return $this
      */
     public function setSaatchiLink($saatchiLink)
@@ -302,7 +323,8 @@ class GalleryImage
     }
 
     /**
-     * @param $pinterestLink
+     * @param string $pinterestLink
+     *
      * @return $this
      */
     public function setPinterestLink($pinterestLink)
@@ -482,6 +504,9 @@ class GalleryImage
         $this->setUpdated(new \DateTime());
     }
 
+    /**
+     * @return void
+     */
     protected function createPreview()
     {
         $image = ImageWorkshop::initFromPath($this->getUploadRootDir() . '/' . $this->path);
@@ -489,10 +514,14 @@ class GalleryImage
         $image->save($this->getUploadRootDir() . '/preview/', $this->path, true, null, 100);
     }
 
+    /**
+     * @return void
+     */
     protected function createThumbnail()
     {
         $image = ImageWorkshop::initFromPath($this->getUploadRootDir() . '/' . $this->path);
         $image->resizeInPixel(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT, true);
         $image->save($this->getUploadRootDir() . '/thumbnail/', $this->path, true, null, 80);
     }
+
 }

@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Gallery
  *
- * @ORM\Table(name="gallery_image_themes")
- * @ORM\Entity(repositoryClass="KarolineKroiss\GalleryBundle\Entity\GalleryImageThemeRepository")
+ * @ORM\Table(name="gallery_image_technique")
+ * @ORM\Entity(repositoryClass="KarolineKroiss\GalleryBundle\Entity\GalleryImageTechniqueRepository")
  */
-class GalleryImageTheme
+class GalleryImageTechnique
 {
     /**
      * @var integer
@@ -25,12 +25,13 @@ class GalleryImageTheme
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=128)
+     * @ORM\Column(name="technique", type="string", length=128)
      */
-    private $name;
+    private $technique;
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -49,12 +50,13 @@ class GalleryImageTheme
     }
 
     /**
-     * @param string $name
+     * @param $technique
+     *
      * @return $this
      */
-    public function setName($name)
+    public function setTechnique($technique)
     {
-        $this->name = $name;
+        $this->technique = $technique;
 
         return $this;
     }
@@ -62,10 +64,9 @@ class GalleryImageTheme
     /**
      * @return string
      */
-    public function getName()
+    public function getTechnique()
     {
-        return $this->name;
+        return $this->technique;
     }
-
 
 }

@@ -12,7 +12,7 @@
                 <h5>&nbsp;</h5>
             </div>
             <div id="right">
-                {% if similarImages is defined %}
+                {% if similarImages is defined and similarImages %}
                     <p>Ähnliche Bilder</p>
                 {% else %}
                     <p>&nbsp;</p>
@@ -43,19 +43,22 @@
                                 <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">
                                     <img src="{{ image.previewPath }}" alt="{{ image.title }}" />
                                 </a>
-                                {% if image.technic or image.size or image.year %}
+                                {% if image.galleryImageTechnique.technique or image.size or image.year or image.isSold %}
                                     <div class="description">
                                         {% if image.title %}
-                                            {{ image.title }} &middot;
+                                            {{ image.title }}
                                         {% endif %}
-                                        {% if image.technic %}
-                                            {{ image.technic }} &middot;
+                                        {% if image.galleryImageTechnique.technique %}
+                                            &middot; {{ image.galleryImageTechnique.technique }}
                                         {% endif %}
                                         {% if image.size %}
-                                            {{ image.size }} &middot;
+                                            &middot; {{ image.size }}
                                         {% endif %}
                                         {% if image.year %}
-                                            {{ image.year }}
+                                            &middot; {{ image.year }}
+                                        {% endif %}
+                                        {% if image.isSold %}
+                                             (verkauft)
                                         {% endif %}
                                     </div>
                                 {% endif %}

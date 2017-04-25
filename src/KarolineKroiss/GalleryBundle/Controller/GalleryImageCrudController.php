@@ -3,7 +3,6 @@
 namespace KarolineKroiss\GalleryBundle\Controller;
 
 use KarolineKroiss\GalleryBundle\Entity\GalleryImage;
-use KarolineKroiss\GalleryBundle\Entity\GalleryImageRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 class GalleryImageCrudController extends CRUDController
 {
 
-    public function resizeAction()
-    {
-        die('Hundnase');
-    }
-
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function cropAction(Request $request)
     {
         $imageId = $request->request->get('imageId');

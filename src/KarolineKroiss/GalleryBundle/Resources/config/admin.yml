@@ -33,10 +33,21 @@ services:
     admin.gallery.image.theme:
         class: KarolineKroiss\GalleryBundle\Admin\GalleryImageThemeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Bild Typ" }
+            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Thema" }
         arguments:
             - ~
             - KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme
+            - ~
+        calls:
+            - [ setTranslationDomain, [KarolineKroissGalleryBundle]]
+
+    admin.gallery.image.technique:
+        class: KarolineKroiss\GalleryBundle\Admin\GalleryImageTechniqueAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Bilder Galerien", label: "Technik" }
+        arguments:
+            - ~
+            - KarolineKroiss\GalleryBundle\Entity\GalleryImageTechnique
             - ~
         calls:
             - [ setTranslationDomain, [KarolineKroissGalleryBundle]]
