@@ -34,6 +34,10 @@ class GalleryAdmin extends AbstractAdmin
                     'label' => 'Zeige diese Galerie auf der Startseite',
                     'required' => false,
                 ])
+                ->add('isActive', 'checkbox', [
+                    'label' => 'Aktiv',
+                    'required' => false,
+                ])
             ->end()
             ->with('Bilder')
                 ->add('images', 'sonata_type_collection', [
@@ -128,6 +132,7 @@ class GalleryAdmin extends AbstractAdmin
             ->add('name', null, ['label' => 'Name'])
             ->add('year', null, ['label' => 'Datum'])
             ->add('isHomepageGallery', null, ['label' => 'Auf Startseite'])
+            ->add('isActive', null, ['label' => 'Aktiv'])
         ;
     }
 
@@ -141,6 +146,7 @@ class GalleryAdmin extends AbstractAdmin
             ->add('name', null, ['label' => 'Name'])
             ->add('year', null, ['label' => 'Datum'])
             ->add('isHomepageGallery', null, ['label' => 'Auf Startseite'])
+            ->add('isActive', null, ['label' => 'Aktiv'])
         ;
     }
 

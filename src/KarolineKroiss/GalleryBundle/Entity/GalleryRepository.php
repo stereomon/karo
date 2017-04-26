@@ -85,8 +85,14 @@ class GalleryRepository extends EntityRepository
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @param \KarolineKroiss\GalleryBundle\Entity\Gallery $gallery
+     *
+     * @return void
+     */
     public function saveGallery(Gallery $gallery)
     {
         $this->getEntityManager()->flush($gallery);
     }
+
 }

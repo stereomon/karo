@@ -2,6 +2,7 @@
 
 namespace KarolineKroiss\GalleryBundle\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use PHPImageWorkshop\ImageWorkshop;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -124,6 +125,31 @@ class GalleryImage
      * @ORM\Column(name="is_sold", type="boolean")
      */
     private $isSold = false;
+
+    /**
+     * @ORM\Column(name="isActive", type="boolean")
+     */
+    private $isActive = false;
+
+    /**
+     * @return bool
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     *
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
 
     /**
      * @return bool
@@ -373,8 +399,11 @@ class GalleryImage
     public function preUpload()
     {
         if (null !== $this->getFile()) {
-            $fileBaseName = str_replace($this->getFile()->getClientOriginalExtension(), '', $this->getFile()->getClientOriginalName());
-            $this->path = $this->getFile()->getClientOriginalName();
+            $pathParts = pathinfo($this->getFile()->getClientOriginalName());
+            $slugify = new Slugify();
+            $fileName = $slugify->slugify($pathParts['filename']);
+
+            $this->path = $fileName . '.' . $pathParts['extension'];
         }
     }
 
@@ -475,16 +504,18 @@ class GalleryImage
      */
     protected function getUploadDir()
     {
-        return '/gallery/' . $this->getGallery()->getId();
+        return '/gallery';
     }
 
     /**
      * @param \DateTime $updated
-     * @return GalleryImage
+     *
+     * @return $this
      */
     public function setUpdated(\DateTime $updated)
     {
         $this->updated = $updated;
+
         return $this;
     }
 

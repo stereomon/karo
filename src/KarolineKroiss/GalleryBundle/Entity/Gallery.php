@@ -49,6 +49,31 @@ class Gallery
     private $isHomepageGallery = false;
 
     /**
+     * @ORM\Column(name="isActive", type="boolean")
+     */
+    private $isActive = false;
+
+    /**
+     * @return bool
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     *
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
      * @var GalleryImage
      * @ORM\OneToMany(targetEntity="GalleryImage", mappedBy="gallery", cascade={"all"}, orphanRemoval=true)
      */

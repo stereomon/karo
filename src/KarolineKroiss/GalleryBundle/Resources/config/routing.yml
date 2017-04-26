@@ -9,3 +9,7 @@ karoline_kroiss_gallery_by_year:
 karoline_kroiss_gallery_by_type:
   path:  /bilder/{id}
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showSimilar }
+
+#karoline_kroiss_gallery_refactor:
+#  path:  /refactor
+#  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:refactor }

@@ -2,11 +2,30 @@
 
 namespace KarolineKroiss\GalleryBundle\Controller;
 
+use Cocur\Slugify\Slugify;
 use KarolineKroiss\GalleryBundle\Entity\Gallery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class GalleryController extends Controller
 {
+
+    /**
+     * @return void
+     */
+    public function refactorAction()
+    {
+        $repo = $this->getGalleryImageRepository();
+
+        /* @var $galleryImage \KarolineKroiss\GalleryBundle\Entity\GalleryImage */
+        foreach ($repo->findAll() as $galleryImage) {
+            $pathParts = pathinfo($galleryImage->getPath());
+            $slugify = new Slugify();
+            $fileName = $slugify->slugify($pathParts['filename']);
+            $newFileName = $fileName . '.' . strtolower($pathParts['extension']);
+            $galleryImage->setPath($newFileName);
+            $repo->saveGalleryImage($galleryImage);
+        }
+    }
 
     /**
      * @param string $type

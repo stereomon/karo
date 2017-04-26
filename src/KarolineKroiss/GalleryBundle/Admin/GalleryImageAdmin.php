@@ -66,6 +66,10 @@ class GalleryImageAdmin extends AbstractAdmin
                     'label' => 'Verkauft',
                     'required' => false,
                 ])
+                ->add('isActive', 'checkbox', [
+                    'label' => 'Aktiv',
+                    'required' => false,
+                ])
             ->end()
         ;
     }
@@ -87,6 +91,7 @@ class GalleryImageAdmin extends AbstractAdmin
             ->add('saatchiLink', null, ['label' => 'Saatchi-Link'])
             ->add('pinterestLink', null, ['label' => 'Pinterest-Link'])
             ->add('isSold', null, ['label' => 'Verkauft'])
+            ->add('isActive', null, ['label' => 'Aktiv'])
         ;
     }
 
@@ -118,6 +123,7 @@ class GalleryImageAdmin extends AbstractAdmin
             ->add('saatchiLink', null, ['label' => 'Saatchi-Link'])
             ->add('pinterestLink', null, ['label' => 'Pinterest-Link'])
             ->add('isSold', null, ['label' => 'Verkauft'])
+            ->add('isActive', null, ['label' => 'Aktiv'])
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'show' => array(),

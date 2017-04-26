@@ -43,7 +43,7 @@
                                 <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">
                                     <img src="{{ image.previewPath }}" alt="{{ image.title }}" />
                                 </a>
-                                {% if image.galleryImageTechnique.technique or image.size or image.year or image.isSold %}
+                                {% if image.galleryImageTechnique or image.size or image.year or image.isSold %}
                                     <div class="description">
                                         {% if image.title %}
                                             {{ image.title }}
