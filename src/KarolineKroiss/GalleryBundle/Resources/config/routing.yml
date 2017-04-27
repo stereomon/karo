@@ -7,7 +7,7 @@ karoline_kroiss_gallery_by_year:
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showByTypeAndYear }
 
 karoline_kroiss_gallery_by_type:
-  path:  /bilder/{id}
+  path:  /bilder/{path}
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showSimilar }
 
 #karoline_kroiss_gallery_refactor:

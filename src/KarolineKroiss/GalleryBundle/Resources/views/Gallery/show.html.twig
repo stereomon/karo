@@ -22,13 +22,14 @@
         <div id="slideshow-container">
             <div id="slideshow" class="slideshow">
                 <ul>
+                    {% set images = gallery is defined ? gallery.images : images %}
                     {% set firstImage = true %}
 
-                    {% if gallery.images is empty %}
+                    {% if images is empty %}
                         <p>Ups, Du hast eine Galerie gefunden der keine Bilder zugeordnet sind.</p>
                     {% endif %}
 
-                    {% for image in gallery.images %}
+                    {% for image in images %}
                             {% if image.pinterestLink or image.saatchiLink %}
                             <div id="social-link-container">
                                 {% if image.saatchiLink %}
@@ -44,7 +45,7 @@
                                 <span id="active-image" data-id="{{ image.id }}"></span>
                             {% endif %}
                             <div data-id="{{ image.id }}" class="image-container" style="display: none">
-                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">
+                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'path': image.path }) }}">
                                     <img src="{{ image.webPathPreview|file }}" alt="{{ image.title }}" />
                                 </a>
                                 {% if image.galleryImageTechnique is not null or image.size or image.year or image.isSold %}
@@ -66,7 +67,7 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-                                <a href="{{ path('karoline_kroiss_gallery_by_type', {'id': image.id}) }}">Zeige ähnliche Bilder</a>
+                                <a href="{{ path('karoline_kroiss_gallery_by_type', {'path': image.path}) }}">Zeige ähnliche Bilder</a>
                             </div>
 
 
@@ -78,7 +79,7 @@
         </div>
         <div id="navigation-container">
             <ul>
-            {% for image in gallery.images %}
+            {% for image in images %}
                 <li>
                     <img class="thumb" src="{{ image.webPathThumbnail|file }}" alt="{{ image.title }}" data-id="{{ image.id }}" />
                 </li>

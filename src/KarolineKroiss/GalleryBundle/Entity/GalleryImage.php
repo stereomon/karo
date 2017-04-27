@@ -369,7 +369,7 @@ class GalleryImage
     /**
      * @param UploadedFile $file
      */
-    protected function setFile(UploadedFile $file = null)
+    public function setFile(UploadedFile $file = null)
     {
         $this->file = $file;
         // check if we have an old image path

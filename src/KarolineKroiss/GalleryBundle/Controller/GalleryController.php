@@ -44,17 +44,18 @@ class GalleryController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param string $path
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showSimilarAction($id)
+    public function showSimilarAction($path)
     {
-        $image = $this->getGalleryImageRepository()->findOneBy(['id' => $id]);
-        $images = $this->getGalleryImageRepository()->findBy(['galleryImageTheme' => $image->getGalleryImageTheme()->getId()]);
+        $galleryImage = $this->getGalleryImageRepository()->findOneBy(['path' => $path]);
+        $similarImages = $this->getGalleryImageRepository()->findSimilar($galleryImage);
 
         return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', [
-            'images' => $images,
-            'type' => $this->mapTypeToName($image->getGalleryImageTheme()->getName()),
+            'images' => $similarImages,
+            'type' => $this->mapTypeToName($galleryImage->getGalleryImageTheme()->getName()),
             'similarImages' => true
         ]);
     }
@@ -78,9 +79,9 @@ class GalleryController extends Controller
      */
     public function detailImageAction($id)
     {
-        $image = $this->getGalleryImageRepository()->findOneBy(['id' => $id]);
+        $galleryImage = $this->getGalleryImageRepository()->findOneBy(['id' => $id]);
         $similar = $this->getGalleryImageRepository()->findBy([
-            'galleryImageTheme' => $image->getGalleryImageTheme()
+            'galleryImageTheme' => $galleryImage->getGalleryImageTheme()
         ]);
 
         return $this->render('KarolineKroissGalleryBundle:Gallery:detail.html.twig', ['similar' => $similar]);
@@ -110,23 +111,6 @@ class GalleryController extends Controller
         }
 
         return $name;
-    }
-
-    /**
-     * @param Gallery[] $galleries
-     *
-     * @return array
-     */
-    private function getImages($galleries)
-    {
-        $images = [];
-        foreach ($galleries as $gallery) {
-            foreach ($gallery->getImages() as $image) {
-                $images[] = $image;
-            }
-        }
-
-        return $images;
     }
 
     /**

@@ -17,4 +17,14 @@ class GalleryImageRepository extends EntityRepository
         $this->getEntityManager()->flush($galleryImage);
     }
 
+    /**
+     * @param \KarolineKroiss\GalleryBundle\Entity\GalleryImage $galleryImage
+     *
+     * @return array
+     */
+    public function findSimilar(GalleryImage $galleryImage)
+    {
+        return $this->findBy(['galleryImageTheme' => $galleryImage->getGalleryImageTheme()]);
+    }
+
 }
