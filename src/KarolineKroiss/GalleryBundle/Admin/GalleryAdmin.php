@@ -23,7 +23,7 @@ class GalleryAdmin extends AbstractAdmin
                 ->add('year', 'choice', [
                     'label' => 'Datum',
                     'choices' => $this->getYearChoices(),
-                    'required' => false,
+                    'required' => true,
                 ])
                 ->add('type', 'choice', [
                     'choices' => [

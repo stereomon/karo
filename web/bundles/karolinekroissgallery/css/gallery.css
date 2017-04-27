@@ -1,0 +1,31 @@
+#right p {
+    float: right;
+    padding: 9px 0 0 ;
+    margin-right: 264px;
+    height: 10px;
+}
+
+#slideshow ul li {
+    position:relative;
+}
+
+#social-link-container {
+    position: absolute;
+    left: -46px;
+    width: 32px;
+}
+.social-link {
+    display: block;
+    height: 32px;
+    width: 32px;
+    margin: 0 0 5px 0;
+    cursor: pointer;
+}
+#social-link-container a {
+    cursor: pointer;
+}
+#saatchi-link img {
+    height: 32px;
+    width: 32px;
+    margin-bottom: 0 0 6px 0;
+}

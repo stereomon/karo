@@ -14,7 +14,7 @@
 
 #preview-pane-new .preview-container,
 #preview-pane-current .current-preview-container {
-    width: 150px;
-    height: 150px;
+    width: 65px;
+    height: 65px;
     overflow: hidden;
 }
