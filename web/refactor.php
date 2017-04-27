@@ -6,7 +6,6 @@ use Cocur\Slugify\Slugify;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-
 $galleryRootDir = __DIR__ . DIRECTORY_SEPARATOR . 'gallery';
 $finder = new Finder();
 

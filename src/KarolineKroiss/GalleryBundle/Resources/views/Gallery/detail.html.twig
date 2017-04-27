@@ -28,8 +28,8 @@
         <p class="gallery-text"><strong>Ähnliche Bilder</strong></p>
         <div class="galleria">
             {% for image in similar %}
-                <a href="{{ image.previewPath }}">
-                    <img src="{{ image.previewPath }}" data-title="{{ image.title }}" data-link="{{ path('karoline_kroiss_gallery_image', {'id': image.id}) }}">
+                <a href="{{ image.webPathPreview|file }}">
+                    <img src="{{ image.webPathThumbnail|file }}" data-title="{{ image.title }}" data-link="{{ path('karoline_kroiss_gallery_image', {'id': image.id}) }}">
                 </a>
             {% endfor %}
         </div>

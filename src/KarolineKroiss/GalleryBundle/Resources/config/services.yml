@@ -6,3 +6,9 @@ services:
     class: KarolineKroiss\GalleryBundle\Form\GalleryImageType
     tags:
       - { name: form.type, alias: karolinekroiss_gallerybundle_gallery }
+
+  app.twig_extension:
+    class: KarolineKroiss\GalleryBundle\Twig\FileTime
+    public: false
+    tags:
+      - { name: twig.extension }

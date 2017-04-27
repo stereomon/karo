@@ -6,12 +6,15 @@ use KarolineKroiss\GalleryBundle\Entity\GalleryImage;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Exception;
 
 class GalleryImageCrudController extends CRUDController
 {
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -24,32 +27,30 @@ class GalleryImageCrudController extends CRUDController
         $targetWidth = 65;
         $targetHeight = 65;
 
-        $quality = 100;
-        $src = $galleryImage->getAbsolutePath();
-        $src = $galleryImage->getUploadRootDir() . '/../../' . $galleryImage->getPreviewPath();
-        $dst = $galleryImage->getUploadRootDir() . '/../../' . $galleryImage->getThumbnailPath();
+        $source = $galleryImage->getAbsolutePreviewPath();
+        $destination = $galleryImage->getAbsoluteThumbnailPath();
 
-        $type = strtolower(substr(strrchr($src, '.'), 1));
+        $extension = pathinfo($source)['extension'];
 
-        if ($type == 'jpeg') {
-            $type = 'jpg';
+        if ($extension == 'jpeg') {
+            $extension = 'jpg';
         }
 
-        switch ($type) {
+        switch ($extension) {
             case 'bmp':
-                $imageResource = imagecreatefromwbmp($src);
+                $imageResource = imagecreatefromwbmp($source);
                 break;
             case 'gif':
-                $imageResource = imagecreatefromgif($src);
+                $imageResource = imagecreatefromgif($source);
                 break;
             case 'jpg':
-                $imageResource = imagecreatefromjpeg($src);
+                $imageResource = imagecreatefromjpeg($source);
                 break;
             case 'png':
-                $imageResource = imagecreatefrompng($src);
+                $imageResource = imagecreatefrompng($source);
                 break;
             default :
-                return 'Unsupported picture type!';
+                return 'Unsupported extension of your file!';
         }
 
         $destinationResource = imagecreatetruecolor($targetWidth, $targetHeight);
@@ -68,28 +69,36 @@ class GalleryImageCrudController extends CRUDController
         );
 
         // preserve transparency
-        if ($type == 'gif' or $type == 'png') {
+        if ($extension == 'gif' or $extension == 'png') {
             imagecolortransparent($destinationResource, imagecolorallocatealpha($destinationResource, 0, 0, 0, 127));
             imagealphablending($destinationResource, false);
             imagesavealpha($destinationResource, true);
         }
 
-        switch ($type) {
+        $result = false;
+
+        if (is_file($destination)) {
+            unlink($destination);
+        }
+
+        switch ($extension) {
             case 'bmp':
-                imagewbmp($destinationResource, $dst);
+                $result = imagewbmp($destinationResource, $destination);
                 break;
             case 'gif':
-                imagegif($destinationResource, $dst);
+                $result = imagegif($destinationResource, $destination);
                 break;
             case 'jpg':
-                imagejpeg($destinationResource, $dst);
+                $result = imagejpeg($destinationResource, $destination);
                 break;
             case 'png':
-                imagepng($destinationResource, $dst);
+                $result = imagepng($destinationResource, $destination);
                 break;
         }
 
-        $request->headers->get('referer');
+        if (!$result) {
+            throw new Exception(sprintf('Image "%s" could not be created!', $destination));
+        }
 
         return new RedirectResponse($request->headers->get('referer'));
     }

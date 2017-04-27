@@ -6,10 +6,8 @@ use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use PHPImageWorkshop\ImageWorkshop;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use DateTime;
 /**
- * GalleryImage
- *
  * @ORM\Table(name="gallery_image")
  * @ORM\Entity(repositoryClass="KarolineKroiss\GalleryBundle\Entity\GalleryImageRepository")
  * @ORM\HasLifecycleCallbacks
@@ -371,7 +369,7 @@ class GalleryImage
     /**
      * @param UploadedFile $file
      */
-    public function setFile(UploadedFile $file = null)
+    protected function setFile(UploadedFile $file = null)
     {
         $this->file = $file;
         // check if we have an old image path
@@ -435,26 +433,17 @@ class GalleryImage
     /**
      * @ORM\PreRemove()
      */
-    public function storeFilenameForRemove()
-    {
-        $this->temp = $this->getAbsolutePath();
-    }
-
-    /**
-     * @ORM\PreRemove()
-     */
     public function removeUpload()
     {
-        $name = $this->path;
-        unlink($this->getUploadRootDir() . '/' . $name);
-        unlink($this->getUploadRootDir() . '/preview/' . $name);
-        unlink($this->getUploadRootDir() . '/thumbnail/' . $name);
+        unlink($this->getAbsoluteOriginPath());
+        unlink($this->getAbsolutePreviewPath());
+        unlink($this->getAbsoluteThumbnailPath());
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getAbsolutePath()
+    public function getAbsoluteOriginPath()
     {
         return $this->getUploadRootDir() . '/' . $this->path;
     }
@@ -462,47 +451,55 @@ class GalleryImage
     /**
      * @return string
      */
-    protected function buildFileName()
+    public function getAbsoluteThumbnailPath()
     {
-        return $this->getId() . '.' . $this->getPath();
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getWebPath()
-    {
-        return $this->getUploadDir() . '/' . $this->path;
+        return $this->getUploadRootDir() . '/thumbnail/' . $this->path;
     }
 
     /**
      * @return string
      */
-    public function getPreviewPath()
+    public function getAbsolutePreviewPath()
     {
-        return $this->getUploadDir() . '/preview/' . $this->path;
+        return $this->getUploadRootDir() . '/preview/' . $this->path;
     }
 
     /**
      * @return string
      */
-    public function getThumbnailPath()
+    protected function getUploadRootDir()
     {
-        return $this->getUploadDir() . '/thumbnail/' . $this->path;
+        return realpath(__DIR__ . '/../../../../web/gallery/');
     }
 
     /**
      * @return string
      */
-    public function getUploadRootDir()
+    public function getWebPathOrigin()
     {
-        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+        return $this->getWebPathBaseDir() . '/' . $this->path;
     }
 
     /**
      * @return string
      */
-    protected function getUploadDir()
+    public function getWebPathPreview()
+    {
+        return $this->getWebPathBaseDir() . '/preview/' . $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebPathThumbnail()
+    {
+        return $this->getWebPathBaseDir() . '/thumbnail/' . $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getWebPathBaseDir()
     {
         return '/gallery';
     }
@@ -512,7 +509,7 @@ class GalleryImage
      *
      * @return $this
      */
-    public function setUpdated(\DateTime $updated)
+    public function setUpdated(DateTime $updated)
     {
         $this->updated = $updated;
 
@@ -532,7 +529,7 @@ class GalleryImage
      */
     public function refreshUpdated()
     {
-        $this->setUpdated(new \DateTime());
+        $this->setUpdated(new DateTime());
     }
 
     /**
@@ -540,9 +537,9 @@ class GalleryImage
      */
     protected function createPreview()
     {
-        $image = ImageWorkshop::initFromPath($this->getUploadRootDir() . '/' . $this->path);
+        $image = ImageWorkshop::initFromPath($this->getAbsoluteOriginPath());
         $image->resizeInPixel(800, null, true);
-        $image->save($this->getUploadRootDir() . '/preview/', $this->path, true, null, 100);
+        $image->save($this->getAbsolutePreviewPath(), true, null, 100);
     }
 
     /**
@@ -552,7 +549,7 @@ class GalleryImage
     {
         $image = ImageWorkshop::initFromPath($this->getUploadRootDir() . '/' . $this->path);
         $image->resizeInPixel(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT, true);
-        $image->save($this->getUploadRootDir() . '/thumbnail/', $this->path, true, null, 80);
+        $image->save($this->getAbsoluteThumbnailPath(), true, null, 80);
     }
 
 }

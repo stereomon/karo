@@ -3,6 +3,7 @@
 namespace KarolineKroiss\GalleryBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 class GalleryRepository extends EntityRepository
 {
@@ -14,8 +15,12 @@ class GalleryRepository extends EntityRepository
     public function findByType($type)
     {
         $queryBuilder = $this->createQueryBuilder('g')
+            ->addSelect('i')
             ->where('g.type = :galleryType')
+            ->where('g.isActive = :isActive')
+            ->leftJoin('g.images', 'i', 'WITH', 'i.isActive = :isActive')
             ->setParameter('galleryType', $type)
+            ->setParameter('isActive', true)
             ->orderBy('g.year', 'DESC')
         ;
 
@@ -30,26 +35,16 @@ class GalleryRepository extends EntityRepository
     public function findByTypeAndYear($type, $year)
     {
         $queryBuilder = $this->createQueryBuilder('g')
+            ->addSelect('i')
             ->where('g.type = :galleryType')
+            ->andWhere('g.isActive = :isActive')
             ->andWhere('g.year >= :galleryDateStart')
             ->andWhere('g.year <= :galleryDateEnd')
+            ->leftJoin('g.images', 'i', 'WITH', 'i.isActive = :isActive')
             ->setParameter('galleryType', $type)
+            ->setParameter('isActive', true)
             ->setParameter('galleryDateStart', $year)
             ->setParameter('galleryDateEnd', $year)
-        ;
-
-        return $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * @return \KarolineKroiss\GalleryBundle\Entity\Gallery|null
-     */
-    public function getLatestGallery()
-    {
-        $queryBuilder = $this->createQueryBuilder('g')
-            ->where('g.type = :galleryType')
-            ->setParameter('galleryType', 'paintings')
-            ->orderBy('g.year', 'DESC')
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
@@ -65,6 +60,8 @@ class GalleryRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('g')
             ->where('g.type = :type')
             ->setParameter('type', $type)
+            ->andWhere('g.isActive = :isActive')
+            ->setParameter('isActive', true)
             ->groupBy('g.year')
             ->orderBy('g.year', 'DESC')
         ;
@@ -78,7 +75,10 @@ class GalleryRepository extends EntityRepository
     public function getHomepageGallery()
     {
         $queryBuilder = $this->createQueryBuilder('g')
+            ->addSelect('i')
             ->where('g.isHomepageGallery = :isHomepageGallery')
+            ->leftJoin('g.images', 'i', 'WITH', 'i.isActive = :isActive')
+            ->setParameter('isActive', true)
             ->setParameter('isHomepageGallery', true)
         ;
 
