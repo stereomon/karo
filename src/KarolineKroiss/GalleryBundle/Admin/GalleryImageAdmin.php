@@ -124,13 +124,13 @@ class GalleryImageAdmin extends AbstractAdmin
             ->add('pinterestLink', null, ['label' => 'Pinterest-Link'])
             ->add('isSold', null, ['label' => 'Verkauft'])
             ->add('isActive', null, ['label' => 'Aktiv'])
-            ->add('_action', 'actions', array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'show' => [], //['template' => 'KarolineKroissGalleryBundle:Admin:show_button.html.twig'],
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ])
         ;
     }
 

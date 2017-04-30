@@ -3,7 +3,6 @@
 namespace KarolineKroiss\GalleryBundle\Admin;
 
 use KarolineKroiss\GalleryBundle\Entity\Gallery;
-use KarolineKroiss\GalleryBundle\Entity\GalleryImage;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -147,6 +146,12 @@ class GalleryAdmin extends AbstractAdmin
             ->add('year', null, ['label' => 'Datum'])
             ->add('isHomepageGallery', null, ['label' => 'Auf Startseite'])
             ->add('isActive', null, ['label' => 'Aktiv'])
+            ->add('_action', 'actions', [
+                'actions' => [
+                    'edit' => [],
+                    'delete' => [],
+                ]
+            ])
         ;
     }
 

@@ -5,6 +5,7 @@ namespace KarolineKroiss\GalleryBundle\Entity;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use PHPImageWorkshop\ImageWorkshop;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use DateTime;
 /**
@@ -63,6 +64,11 @@ class GalleryImage
      * @ORM\Column(name="title", type="string", length=128)
      */
     private $title;
+
+    /**
+     * @var string
+     */
+    private $oldTitle;
 
     /**
      * @var \KarolineKroiss\GalleryBundle\Entity\GalleryImageTechnique
@@ -253,6 +259,7 @@ class GalleryImage
      */
     public function setTitle($title)
     {
+        $this->oldTitle = $this->title;
         $this->title = $title;
 
         return $this;
@@ -398,10 +405,32 @@ class GalleryImage
     {
         if (null !== $this->getFile()) {
             $pathParts = pathinfo($this->getFile()->getClientOriginalName());
-            $slugify = new Slugify();
-            $fileName = $slugify->slugify($pathParts['filename']);
+            $fileName = $this->slugify($this->title);
 
             $this->path = $fileName . '.' . $pathParts['extension'];
+        }
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     *
+     * @return void
+     */
+    public function updateImageNames()
+    {
+        if ($this->title !== $this->oldTitle && $this->path) {
+            $oldImageName = $this->slugify($this->oldTitle);
+            $newImageName = $this->slugify($this->title);
+            $oldFilePaths = $this->getFilePaths();
+            $this->path = str_replace($oldImageName, $newImageName, $this->path);
+            $newFilePaths = $this->getFilePaths();
+
+            $filesystem = new Filesystem();
+            foreach ($oldFilePaths as $index => $filePath) {
+                if (is_file($filePath)) {
+                    $filesystem->rename($filePath, $newFilePaths[$index]);
+                }
+            }
         }
     }
 
@@ -415,10 +444,6 @@ class GalleryImage
             return;
         }
 
-        if (isset($this->temp)) {
-            $this->removeUpload();
-            $this->temp = null;
-        }
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $this->path
@@ -428,6 +453,10 @@ class GalleryImage
         $this->createThumbnail();
 
         $this->setFile(null);
+
+        if (isset($this->temp) && is_file($this->temp)) {
+            unlink($this->temp);
+        }
     }
 
     /**
@@ -435,9 +464,13 @@ class GalleryImage
      */
     public function removeUpload()
     {
-        unlink($this->getAbsoluteOriginPath());
-        unlink($this->getAbsolutePreviewPath());
-        unlink($this->getAbsoluteThumbnailPath());
+        $fileList = $this->getFilePaths();
+
+        foreach ($fileList as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
     }
 
     /**
@@ -539,7 +572,8 @@ class GalleryImage
     {
         $image = ImageWorkshop::initFromPath($this->getAbsoluteOriginPath());
         $image->resizeInPixel(800, null, true);
-        $image->save($this->getAbsolutePreviewPath(), true, null, 100);
+        $path = $this->getAbsolutePreviewPath();
+        $image->save(dirname($path), basename($path), true, null, 100);
     }
 
     /**
@@ -549,7 +583,34 @@ class GalleryImage
     {
         $image = ImageWorkshop::initFromPath($this->getUploadRootDir() . '/' . $this->path);
         $image->resizeInPixel(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT, true);
-        $image->save($this->getAbsoluteThumbnailPath(), true, null, 80);
+        $path = $this->getAbsoluteThumbnailPath();
+        $image->save(dirname($path), basename($path), true, null, 80);
+    }
+
+    /**
+     * @param $title
+     *
+     * @return string
+     */
+    private function slugify($title)
+    {
+        $slugify = new Slugify();
+
+        return $slugify->slugify($title);
+    }
+
+    /**
+     * @return array
+     */
+    private function getFilePaths()
+    {
+        $fileList = [
+            $this->getAbsoluteOriginPath(),
+            $this->getAbsolutePreviewPath(),
+            $this->getAbsoluteThumbnailPath(),
+        ];
+
+        return $fileList;
     }
 
 }

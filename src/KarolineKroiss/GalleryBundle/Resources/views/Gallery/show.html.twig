@@ -40,7 +40,7 @@
                                 {% endif %}
                             </div>
                             {% endif %}
-                            {% if firstImage %}
+                        {% if firstImage %}
                             {% set firstImage = false %}
                                 <span id="active-image" data-id="{{ image.id }}"></span>
                             {% endif %}
@@ -65,6 +65,8 @@
                                         {% if image.isSold %}
                                              (verkauft)
                                         {% endif %}
+
+                                        <a style="position: absolute;" data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
                                     </div>
                                 {% endif %}
                                 <a href="{{ path('karoline_kroiss_gallery_by_type', {'path': image.path}) }}">Zeige ähnliche Bilder</a>
