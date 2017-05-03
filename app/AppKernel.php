@@ -1,5 +1,6 @@
 <?php
 
+use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use FOS\UserBundle\FOSUserBundle;
 use Ivory\CKEditorBundle\IvoryCKEditorBundle;
 use KarolineKroiss\ArtGalleryBundle\KarolineKroissArtGalleryBundle;

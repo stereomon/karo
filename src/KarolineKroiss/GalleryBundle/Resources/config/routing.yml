@@ -3,13 +3,9 @@ karoline_kroiss_gallery_homepage:
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:firstGallery }
 
 karoline_kroiss_gallery_by_year:
-  path:  /bilder/{type}/{year}
+  path:  /gallerie/{type}/{year}
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showByTypeAndYear }
 
-karoline_kroiss_gallery_by_type:
-  path:  /bilder/{path}
+karoline_kroiss_gallery_images_by_gallery_image_themes:
+  path:  /bild/{name}
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showSimilar }
-
-#karoline_kroiss_gallery_refactor:
-#  path:  /refactor
-#  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:refactor }

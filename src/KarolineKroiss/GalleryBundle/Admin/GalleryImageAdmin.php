@@ -25,11 +25,11 @@ class GalleryImageAdmin extends AbstractAdmin
                     'choice_label' => 'name',
                     'multiple'  => false,
                 ])
-                ->add('gallery_image_theme', 'entity', [
+                ->add('gallery_image_themes', 'entity', [
                     'class' => 'KarolineKroissGalleryBundle:GalleryImageTheme',
                     'choice_label' => 'name',
-                    'multiple'  => false,
-                    'label' => 'Thema'
+                    'multiple'  => true,
+                    'label' => 'Themen'
                 ])
                 ->add('title', 'text', [
                     'label' => 'Titel'
@@ -83,7 +83,7 @@ class GalleryImageAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('gallery.name', null, ['label' => 'Galerie'])
-            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
+//            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
             ->add('title', null, ['label' => 'Titel'])
             ->add('galleryImageTechnique.technique', null, ['label' => 'Technik'])
             ->add('size', null, ['label' => 'Größe (B x H x T)'])
@@ -96,16 +96,6 @@ class GalleryImageAdmin extends AbstractAdmin
     }
 
     /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     *
-     * @return void
-     */
-    protected function configureShowFields(ShowMapper $showMapper)
-    {
-//        echo '<pre>' . PHP_EOL . var_dump($showMapper->getAdmin()->getSubject()) . PHP_EOL . 'Line: ' . __LINE__ . PHP_EOL . 'File: ' . __FILE__ . die();
-    }
-
-    /**
      * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
      *
      * @return void
@@ -115,7 +105,7 @@ class GalleryImageAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('id')
             ->add('gallery.name', null, ['label' => 'Galerie'])
-            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
+//            ->add('galleryImageTheme.name', null, ['label' => 'Thema'])
             ->add('title', null, ['label' => 'Titel'])
             ->add('galleryImageTechnique.technique', null, ['label' => 'Technik'])
             ->add('size', null, ['label' => 'Größe (B x H x T)'])
@@ -162,6 +152,11 @@ class GalleryImageAdmin extends AbstractAdmin
         }
     }
 
+    /**
+     * @param \Sonata\AdminBundle\Route\RouteCollection $collection
+     *
+     * @return void
+     */
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('crop');

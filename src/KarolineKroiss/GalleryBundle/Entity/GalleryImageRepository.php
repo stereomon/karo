@@ -18,13 +18,13 @@ class GalleryImageRepository extends EntityRepository
     }
 
     /**
-     * @param \KarolineKroiss\GalleryBundle\Entity\GalleryImage $galleryImage
+     * @param string $name
      *
-     * @return array
+     * @return object|\KarolineKroiss\GalleryBundle\Entity\GalleryImage
      */
-    public function findSimilar(GalleryImage $galleryImage)
+    public function findByName($name)
     {
-        return $this->findBy(['galleryImageTheme' => $galleryImage->getGalleryImageTheme()]);
+        return $this->findOneBy(['name' => $name]);
     }
 
 }

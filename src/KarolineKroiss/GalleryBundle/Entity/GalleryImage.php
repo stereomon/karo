@@ -3,11 +3,13 @@
 namespace KarolineKroiss\GalleryBundle\Entity;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use PHPImageWorkshop\ImageWorkshop;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Table(name="gallery_image")
  * @ORM\Entity(repositoryClass="KarolineKroiss\GalleryBundle\Entity\GalleryImageRepository")
@@ -51,19 +53,29 @@ class GalleryImage
     private $gallery;
 
     /**
-    * @var GalleryImageTheme
+     * @var Collection|GalleryImageTheme[]
      *
-    * @ORM\ManyToOne(targetEntity="KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme")
-    * @ORM\JoinColumn(name="gallery_image_theme", referencedColumnName="id", unique=false)
-    */
-    private $galleryImageTheme;
+     * @ORM\ManyToMany(targetEntity="GalleryImageTheme", inversedBy="galleryImages", fetch="EAGER")
+     * @ORM\JoinTable(name="gallery_image_themes",
+     *      joinColumns={@ORM\JoinColumn(name="gallery_image_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="gallery_image_theme_id", referencedColumnName="id")}
+     *      )
+     */
+    private $galleryImageThemes;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=128)
+     * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
 
     /**
      * @var string
@@ -112,6 +124,9 @@ class GalleryImage
     private $file;
 
     /**
+     * Store old file name if new one is added. This is then
+     * used to delete the old image after the new one is applied.
+     *
      * @var string
      */
     private $temp;
@@ -134,6 +149,11 @@ class GalleryImage
      * @ORM\Column(name="isActive", type="boolean")
      */
     private $isActive = false;
+
+    public function __construct()
+    {
+        $this->galleryImageThemes = new ArrayCollection();
+    }
 
     /**
      * @return bool
@@ -192,6 +212,7 @@ class GalleryImage
     public function setPath($path)
     {
         $this->path = $path;
+
         return $this;
     }
 
@@ -210,6 +231,7 @@ class GalleryImage
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
@@ -233,23 +255,53 @@ class GalleryImage
     }
 
     /**
-     * @param GalleryImageTheme $galleryImageTheme
+     * @param Collection|GalleryImageTheme[] $galleryImageThemes
      *
      * @return $this
      */
-    public function setGalleryImageTheme(GalleryImageTheme $galleryImageTheme)
+    public function setGalleryImageThemes(Collection $galleryImageThemes)
     {
-        $this->galleryImageTheme = $galleryImageTheme;
+        $this->galleryImageThemes = $galleryImageThemes;
 
         return $this;
     }
 
     /**
-     * @return \KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme
+     * @param GalleryImageTheme $galleryImageTheme
+     *
+     * @return $this
      */
-    public function getGalleryImageTheme()
+    public function addGalleryImageTheme(GalleryImageTheme $galleryImageTheme)
     {
-        return $this->galleryImageTheme;
+        if (!$this->galleryImageThemes->contains($galleryImageTheme)) {
+            $galleryImageTheme->addGalleryImage($this);
+            $this->galleryImageThemes->add($galleryImageTheme);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param GalleryImageTheme $galleryImageTheme
+     *
+     * @return $this
+     */
+    public function removeGalleryImageTheme(GalleryImageTheme $galleryImageTheme)
+    {
+        if ($this->galleryImageThemes->contains($galleryImageTheme)) {
+            $galleryImageTheme->removeGalleryImage($this);
+            $this->galleryImageThemes->add($galleryImageTheme);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|\KarolineKroiss\GalleryBundle\Entity\GalleryImageTheme[]
+     */
+    public function getGalleryImageThemes()
+    {
+        return $this->galleryImageThemes;
     }
 
     /**
@@ -261,6 +313,7 @@ class GalleryImage
     {
         $this->oldTitle = $this->title;
         $this->title = $title;
+        $this->name = $this->setName($title);
 
         return $this;
     }
@@ -271,6 +324,26 @@ class GalleryImage
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    public function setName($name)
+    {
+        $this->name = $this->slugify($name);
+
+        return $this;
     }
 
     /**
@@ -418,7 +491,7 @@ class GalleryImage
      */
     public function updateImageNames()
     {
-        if ($this->title !== $this->oldTitle && $this->path) {
+        if ($this->oldTitle && $this->title !== $this->oldTitle && $this->path) {
             $oldImageName = $this->slugify($this->oldTitle);
             $newImageName = $this->slugify($this->title);
             $oldFilePaths = $this->getFilePaths();
@@ -611,6 +684,40 @@ class GalleryImage
         ];
 
         return $fileList;
+    }
+
+    /**
+     * @return true
+     */
+    public function hasSimilarImages()
+    {
+        foreach ($this->getGalleryImageThemes() as $galleryImageTheme) {
+            foreach ($galleryImageTheme->getGalleryImages() as $galleryImage) {
+                if ($galleryImage->getId() !== $this->getId()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSimilarImages()
+    {
+        $similarImages = [];
+
+        foreach ($this->getGalleryImageThemes() as $galleryImageTheme) {
+            foreach ($galleryImageTheme->getGalleryImages() as $galleryImage) {
+                if (!isset($similarImages[$galleryImage->getId()]) && $galleryImage->getId() !== $this->getId()) {
+                    $similarImages[$galleryImage->getId()] = $galleryImage;
+                }
+            }
+        }
+
+        return $similarImages;
     }
 
 }

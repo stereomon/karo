@@ -16,6 +16,8 @@ class GalleryAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $gallery = $this->getSubject();
+
         $formMapper
             ->with('Bilder Galerie')
                 ->add('name')
@@ -32,10 +34,12 @@ class GalleryAdmin extends AbstractAdmin
                 ->add('isHomePageGallery', 'checkbox', [
                     'label' => 'Zeige diese Galerie auf der Startseite',
                     'required' => false,
+                    'disabled' => ($gallery && $this->isHomepageGallery($gallery)) ? : false,
                 ])
                 ->add('isActive', 'checkbox', [
                     'label' => 'Aktiv',
                     'required' => false,
+                    'disabled' => ($gallery && $this->isHomepageGallery($gallery)) ? : false,
                 ])
             ->end()
             ->with('Bilder')
@@ -91,6 +95,8 @@ class GalleryAdmin extends AbstractAdmin
     private function updateHomepageGallery(Gallery $gallery)
     {
         if ($this->isHomepageGallery($gallery)) {
+            $gallery->setIsActive(true);
+
             $galleryRepository = $this->getGalleryRepository();
             $homePageGallery = $galleryRepository->getHomepageGallery();
             if ($homePageGallery && $homePageGallery->getId() !== $gallery->getId()) {

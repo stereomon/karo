@@ -45,35 +45,29 @@
                                 <span id="active-image" data-id="{{ image.id }}"></span>
                             {% endif %}
                             <div data-id="{{ image.id }}" class="image-container" style="display: none">
-                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_by_type', {'path': image.path }) }}">
-                                    <img src="{{ image.webPathPreview|file }}" alt="{{ image.title }}" />
+                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name }) }}">
+                                    <img src="{{ image.webPathPreview | file }}" alt="{{ image.title }}" />
                                 </a>
-                                {% if image.galleryImageTechnique is not null or image.size or image.year or image.isSold %}
-                                    <div class="description">
-                                        {% if image.title %}
-                                            {{ image.title }}
-                                        {% endif %}
-                                        {% if image.galleryImageTechnique is not null %}
-                                            &middot; {{ image.galleryImageTechnique.technique }}
-                                        {% endif %}
-                                        {% if image.size %}
-                                            &middot; {{ image.size }}
-                                        {% endif %}
-                                        {% if image.year %}
-                                            &middot; {{ image.year }}
-                                        {% endif %}
-                                        {% if image.isSold %}
-                                             (verkauft)
-                                        {% endif %}
-
-                                        <a style="position: absolute;" data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
-                                    </div>
+                                <div class="description">
+                                    {{ image.title }}
+                                    {% if image.galleryImageTechnique is not null %}
+                                        &middot; {{ image.galleryImageTechnique.technique }}
+                                    {% endif %}
+                                    {% if image.size %}
+                                        &middot; {{ image.size }}
+                                    {% endif %}
+                                    {% if image.year %}
+                                        &middot; {{ image.year }}
+                                    {% endif %}
+                                    {% if image.isSold %}
+                                        &middot; (verkauft)
+                                    {% endif %}
+                                    &middot; <a data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
+                                </div>
+                                {% if image.hasSimilarImages %}
+                                    <a href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name}) }}">Zeige ähnliche Bilder</a>
                                 {% endif %}
-                                <a href="{{ path('karoline_kroiss_gallery_by_type', {'path': image.path}) }}">Zeige ähnliche Bilder</a>
                             </div>
-
-
-                        </li>
                     {% endfor %}
 
                 </ul>

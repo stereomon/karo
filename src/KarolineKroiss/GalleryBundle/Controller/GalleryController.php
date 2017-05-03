@@ -2,30 +2,10 @@
 
 namespace KarolineKroiss\GalleryBundle\Controller;
 
-use Cocur\Slugify\Slugify;
-use KarolineKroiss\GalleryBundle\Entity\Gallery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class GalleryController extends Controller
 {
-
-    /**
-     * @return void
-     */
-    public function refactorAction()
-    {
-        $repo = $this->getGalleryImageRepository();
-
-        /* @var $galleryImage \KarolineKroiss\GalleryBundle\Entity\GalleryImage */
-        foreach ($repo->findAll() as $galleryImage) {
-            $pathParts = pathinfo($galleryImage->getPath());
-            $slugify = new Slugify();
-            $fileName = $slugify->slugify($pathParts['filename']);
-            $newFileName = $fileName . '.' . strtolower($pathParts['extension']);
-            $galleryImage->setPath($newFileName);
-            $repo->saveGalleryImage($galleryImage);
-        }
-    }
 
     /**
      * @param string $type
@@ -44,18 +24,16 @@ class GalleryController extends Controller
     }
 
     /**
-     * @param string $path
+     * @param string $name
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showSimilarAction($path)
+    public function showSimilarAction($name)
     {
-        $galleryImage = $this->getGalleryImageRepository()->findOneBy(['path' => $path]);
-        $similarImages = $this->getGalleryImageRepository()->findSimilar($galleryImage);
+        $galleryImage = $this->getGalleryImageRepository()->findByName($name);
 
         return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', [
-            'images' => $similarImages,
-            'type' => $this->mapTypeToName($galleryImage->getGalleryImageTheme()->getName()),
+            'images' => $galleryImage->getSimilarImages(),
             'similarImages' => true
         ]);
     }
@@ -71,20 +49,6 @@ class GalleryController extends Controller
             'gallery' => $homepageGallery,
             'type' => $this->mapTypeToName($homepageGallery->getType())
         ]);
-    }
-
-    /**
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function detailImageAction($id)
-    {
-        $galleryImage = $this->getGalleryImageRepository()->findOneBy(['id' => $id]);
-        $similar = $this->getGalleryImageRepository()->findBy([
-            'galleryImageTheme' => $galleryImage->getGalleryImageTheme()
-        ]);
-
-        return $this->render('KarolineKroissGalleryBundle:Gallery:detail.html.twig', ['similar' => $similar]);
     }
 
     /**

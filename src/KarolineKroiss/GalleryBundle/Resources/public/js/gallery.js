@@ -1,6 +1,7 @@
 $(document).ready(function(){
     var currentImageId = $('#active-image').data('id');
     $('div').find("[data-id='" + currentImageId + "']").show();
+
     $('.thumb').click(function(){
         var clickedId = $(this).data('id');
         if (currentImageId !== clickedId) {
