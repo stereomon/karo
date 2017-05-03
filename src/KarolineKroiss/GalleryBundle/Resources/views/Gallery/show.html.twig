@@ -7,81 +7,87 @@
     <link rel="stylesheet" href="{{ asset('bundles/karolinekroissgallery/css/gallery.css') }}" />
 
     <div id="image-gallery">
-        <div id="info-text">
-            <div id="left">
-                <h5>&nbsp;</h5>
-            </div>
-            <div id="right">
-                {% if similarImages is defined and similarImages %}
-                    <p>Ähnliche Bilder</p>
-                {% else %}
-                    <p>&nbsp;</p>
-                {% endif %}
-            </div>
-        </div>
-        <div id="slideshow-container">
-            <div id="slideshow" class="slideshow">
-                <ul>
-                    {% set images = gallery is defined ? gallery.images : images %}
-                    {% set firstImage = true %}
 
-                    {% if images is empty %}
-                        <p>Ups, Du hast eine Galerie gefunden der keine Bilder zugeordnet sind.</p>
+        {% if gallery is defined %}
+            <div id="info-text">
+                <div id="left">
+                    <h5>&nbsp;</h5>
+                </div>
+                <div id="right">
+                    {% if similarImages is defined and similarImages %}
+                        <p>Ähnliche Bilder</p>
+                    {% else %}
+                        <p>&nbsp;</p>
                     {% endif %}
+                </div>
+            </div>
+            <div id="slideshow-container">
+                <div id="slideshow" class="slideshow">
+                    <ul>
+                        {% set images = gallery is defined ? gallery.images : images %}
+                        {% set firstImage = true %}
 
-                    {% for image in images %}
-                            {% if image.pinterestLink or image.saatchiLink %}
-                            <div id="social-link-container">
-                                {% if image.saatchiLink %}
-                                    <a href="{{ image.saatchiLink }}" id="saatchi-link" class="social-link">
-                                        <img src="{{ asset('bundles/karolinekroissgallery/images/saatchi.png') }}" />
-                                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&description={{ image.title }}" data-pin-do="buttonPin" data-pin-shape="round" data-pin-height="32" id="pinterest-link"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" /></a>
-                                    </a>
-                                {% endif %}
-                            </div>
-                            {% endif %}
-                        {% if firstImage %}
-                            {% set firstImage = false %}
-                                <span id="active-image" data-id="{{ image.id }}"></span>
-                            {% endif %}
-                            <div data-id="{{ image.id }}" class="image-container" style="display: none">
-                                <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name }) }}">
-                                    <img src="{{ image.webPathPreview | file }}" alt="{{ image.title }}" />
-                                </a>
-                                <div class="description">
-                                    {{ image.title }}
-                                    {% if image.galleryImageTechnique is not null %}
-                                        &middot; {{ image.galleryImageTechnique.technique }}
+                        {% if images is empty %}
+                            <p>Ups, Du hast eine Galerie gefunden der keine Bilder zugeordnet sind.</p>
+                        {% endif %}
+
+                        {% for image in images %}
+                                {% if image.pinterestLink or image.saatchiLink %}
+                                <div id="social-link-container">
+                                    {% if image.saatchiLink %}
+                                        <a href="{{ image.saatchiLink }}" id="saatchi-link" class="social-link">
+                                            <img src="{{ asset('bundles/karolinekroissgallery/images/saatchi.png') }}" />
+                                    <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&description={{ image.title }}" data-pin-do="buttonPin" data-pin-shape="round" data-pin-height="32" id="pinterest-link"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" /></a>
+                                        </a>
                                     {% endif %}
-                                    {% if image.size %}
-                                        &middot; {{ image.size }}
-                                    {% endif %}
-                                    {% if image.year %}
-                                        &middot; {{ image.year }}
-                                    {% endif %}
-                                    {% if image.isSold %}
-                                        &middot; (verkauft)
-                                    {% endif %}
-                                    &middot; <a data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
                                 </div>
-                                {% if image.hasSimilarImages %}
-                                    <a href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name}) }}">Zeige ähnliche Bilder</a>
                                 {% endif %}
-                            </div>
-                    {% endfor %}
+                            {% if firstImage %}
+                                {% set firstImage = false %}
+                                    <span id="active-image" data-id="{{ image.id }}"></span>
+                                {% endif %}
+                                <div data-id="{{ image.id }}" class="image-container" style="display: none">
+                                    <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name }) }}">
+                                        <img src="{{ image.webPathPreview | file }}" alt="{{ image.title }}" />
+                                    </a>
+                                    <div class="description">
+                                        {{ image.title }}
+                                        {% if image.galleryImageTechnique is not null %}
+                                            &middot; {{ image.galleryImageTechnique.technique }}
+                                        {% endif %}
+                                        {% if image.size %}
+                                            &middot; {{ image.size }}
+                                        {% endif %}
+                                        {% if image.year %}
+                                            &middot; {{ image.year }}
+                                        {% endif %}
+                                        {% if image.isSold %}
+                                            &middot; (verkauft)
+                                        {% endif %}
+                                        &middot; <a data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
+                                    </div>
+                                    {% if image.hasSimilarImages %}
+                                        <a href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name}) }}">Zeige ähnliche Bilder</a>
+                                    {% endif %}
+                                </div>
+                        {% endfor %}
 
+                    </ul>
+                </div>
+            </div>
+            <div id="navigation-container">
+                <ul>
+                {% for image in images %}
+                    <li>
+                        <img class="thumb" src="{{ image.webPathThumbnail|file }}" alt="{{ image.title }}" data-id="{{ image.id }}" />
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
-        </div>
-        <div id="navigation-container">
-            <ul>
-            {% for image in images %}
-                <li>
-                    <img class="thumb" src="{{ image.webPathThumbnail|file }}" alt="{{ image.title }}" data-id="{{ image.id }}" />
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% else %}
+            <br />
+            <p>Diese Seite befindet sich noch im Aufbau, bitte haben Sie noch etwas Geduld...</p>
+        {% endif %}
         <div style="clear: both;"></div>
     </div>
 {% endblock %}

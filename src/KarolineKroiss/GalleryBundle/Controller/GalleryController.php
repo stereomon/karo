@@ -16,11 +16,15 @@ class GalleryController extends Controller
     {
         $gallery = $this->getGalleryRepository()->findByTypeAndYear($type, $year);
 
-        return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', [
-            'gallery' => $gallery,
-            'type' => $this->mapTypeToName($gallery->getType()),
-            'similarImages' => false
-        ]);
+        $viewData = [
+            'similarImages' => false,
+        ];
+        if ($gallery) {
+            $viewData['gallery'] = $gallery;
+            $viewData['type'] = $this->mapTypeToName($gallery->getType());
+        }
+
+        return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', $viewData);
     }
 
     /**
@@ -45,10 +49,15 @@ class GalleryController extends Controller
     {
         $homepageGallery = $this->getGalleryRepository()->getHomepageGallery();
 
-        return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', [
-            'gallery' => $homepageGallery,
-            'type' => $this->mapTypeToName($homepageGallery->getType())
-        ]);
+        $viewData = [];
+        if ($homepageGallery) {
+            $viewData = [
+                'gallery' => $homepageGallery,
+                'type' => $this->mapTypeToName($homepageGallery->getType())
+            ];
+        }
+
+        return $this->render('KarolineKroissGalleryBundle:Gallery:show.html.twig', $viewData);
     }
 
     /**
