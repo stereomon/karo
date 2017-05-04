@@ -20,6 +20,20 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+
+    /**
+     * @param string $environment
+     * @param bool $debug
+     */
+    public function __construct($environment, $debug)
+    {
+        date_default_timezone_set( 'Europe/Paris' );
+        parent::__construct($environment, $debug);
+    }
+
+    /**
+     * @return array
+     */
     public function registerBundles()
     {
         $bundles = [

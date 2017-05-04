@@ -313,7 +313,7 @@ class GalleryImage
     {
         $this->oldTitle = $this->title;
         $this->title = $title;
-        $this->name = $this->setName($title);
+        $this->setName($title);
 
         return $this;
     }
