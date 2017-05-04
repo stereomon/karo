@@ -480,7 +480,7 @@ class GalleryImage
             $pathParts = pathinfo($this->getFile()->getClientOriginalName());
             $fileName = $this->slugify($this->title);
 
-            $this->path = $fileName . '.' . $pathParts['extension'];
+            $this->path = $fileName . '.' . strtolower($pathParts['extension']);
         }
     }
 
