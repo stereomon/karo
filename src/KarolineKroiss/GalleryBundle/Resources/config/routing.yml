@@ -9,3 +9,7 @@ karoline_kroiss_gallery_by_year:
 karoline_kroiss_gallery_images_by_gallery_image_themes:
   path:  /bild/{name}
   defaults: { _controller: KarolineKroissGalleryBundle:Gallery:showSimilar }
+
+karoline_kroiss_gallery_image_detail:
+  path:  /detail/{name}
+  defaults: { _controller: KarolineKroissGalleryBundle:Gallery:detail }

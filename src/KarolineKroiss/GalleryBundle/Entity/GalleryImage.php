@@ -707,11 +707,13 @@ class GalleryImage
      */
     public function getSimilarImages()
     {
-        $similarImages = [];
+        $similarImages = [
+            $this->getId() => $this,
+        ];
 
         foreach ($this->getGalleryImageThemes() as $galleryImageTheme) {
             foreach ($galleryImageTheme->getGalleryImages() as $galleryImage) {
-                if (!isset($similarImages[$galleryImage->getId()]) && $galleryImage->getId() !== $this->getId()) {
+                if ($galleryImage->getIsActive() && !isset($similarImages[$galleryImage->getId()]) && $galleryImage->getId() !== $this->getId()) {
                     $similarImages[$galleryImage->getId()] = $galleryImage;
                 }
             }

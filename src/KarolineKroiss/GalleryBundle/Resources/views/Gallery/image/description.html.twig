@@ -1,0 +1,16 @@
+<div id="description">
+    {{ image.title }}
+    {% if image.galleryImageTechnique is not null %}
+        &middot; {{ image.galleryImageTechnique.technique }}
+    {% endif %}
+    {% if image.size %}
+        &middot; {{ image.size }}
+    {% endif %}
+    {% if image.year %}
+        &middot; {{ image.year }}
+    {% endif %}
+    {% if image.isSold %}
+        &middot; (verkauft)
+    {% endif %}
+    &middot; <a data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
+</div>

@@ -43,6 +43,20 @@ class GalleryController extends Controller
     }
 
     /**
+     * @param string $name
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function detailAction($name)
+    {
+        $galleryImage = $this->getGalleryImageRepository()->findByName($name);
+
+        return $this->render('KarolineKroissGalleryBundle:Gallery:detail.html.twig', [
+            'image' => $galleryImage,
+        ]);
+    }
+
+    /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function firstGalleryAction()

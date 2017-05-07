@@ -32,40 +32,25 @@
                         {% endif %}
 
                         {% for image in images %}
-                                {% if image.pinterestLink or image.saatchiLink %}
-                                <div id="social-link-container">
-                                    {% if image.saatchiLink %}
-                                        <a href="{{ image.saatchiLink }}" id="saatchi-link" class="social-link">
-                                            <img src="{{ asset('bundles/karolinekroissgallery/images/saatchi.png') }}" />
-                                    <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&description={{ image.title }}" data-pin-do="buttonPin" data-pin-shape="round" data-pin-height="32" id="pinterest-link"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" /></a>
-                                        </a>
-                                    {% endif %}
-                                </div>
+                            {% if image.pinterestLink or image.saatchiLink %}
+                            <div id="social-link-container">
+                                {% if image.saatchiLink %}
+                                    <a href="{{ image.saatchiLink }}" id="saatchi-link" class="social-link">
+                                        <img src="{{ asset('bundles/karolinekroissgallery/images/saatchi.png') }}" />
+                                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&description={{ image.title }}" data-pin-do="buttonPin" data-pin-shape="round" data-pin-height="32" id="pinterest-link"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" /></a>
+                                    </a>
                                 {% endif %}
+                            </div>
+                            {% endif %}
                             {% if firstImage %}
                                 {% set firstImage = false %}
                                     <span id="active-image" data-id="{{ image.id }}"></span>
                                 {% endif %}
                                 <div data-id="{{ image.id }}" class="image-container" style="display: none">
-                                    <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name }) }}">
+                                    <a class="preview" name="{{ image.title }}" href="{{ path('karoline_kroiss_gallery_image_detail', {'name': image.name }) }}">
                                         <img src="{{ image.webPathPreview | file }}" alt="{{ image.title }}" />
                                     </a>
-                                    <div class="description">
-                                        {{ image.title }}
-                                        {% if image.galleryImageTechnique is not null %}
-                                            &middot; {{ image.galleryImageTechnique.technique }}
-                                        {% endif %}
-                                        {% if image.size %}
-                                            &middot; {{ image.size }}
-                                        {% endif %}
-                                        {% if image.year %}
-                                            &middot; {{ image.year }}
-                                        {% endif %}
-                                        {% if image.isSold %}
-                                            &middot; (verkauft)
-                                        {% endif %}
-                                        &middot; <a data-pin-do="buttonBookmark" data-pin-save="true" href="https://www.pinterest.com/pin/create/button/"></a>
-                                    </div>
+                                    {{ include('KarolineKroissGalleryBundle:Gallery:image/description.html.twig', { 'image': image }) }}
                                     {% if image.hasSimilarImages %}
                                         <a href="{{ path('karoline_kroiss_gallery_images_by_gallery_image_themes', {'name': image.name}) }}">Zeige ähnliche Bilder</a>
                                     {% endif %}

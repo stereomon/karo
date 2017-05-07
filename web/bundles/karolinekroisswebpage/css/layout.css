@@ -1,0 +1,92 @@
+.main {
+    padding: 20px 0;
+}
+
+.center {
+    float: none;
+    position: relative;
+    margin: 10px auto 20px auto;
+}
+
+.similar {
+    padding: 10px 0 2px 0;
+    margin: 0;
+}
+
+header h1 {
+    letter-spacing: .6em;
+    font-size: 38px;
+    margin: 0 0 4px 15px;
+    padding: 20px 0;
+    color: #000;
+}
+
+#navigation-bar {
+    height: 40px;
+    background-color: #555;
+}
+#navigation-bar .nav>li>a {
+    color: #fff;
+    padding-top: 8px;
+}
+
+.link-list li {
+    list-style: none;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.last {
+    border: none;
+    background: none;
+}
+.nav .open>a, .nav .open>a:hover, .nav .open>a:focus {
+    background-color: transparent;
+    border-color: transparent;
+}
+.nav-tabs>li>a:hover {
+    border-color: transparent;
+}
+.nav-tabs {
+    border-bottom: 0;
+}
+.nav>li>a:hover {
+    background-color: transparent;
+}
+#login-logout {
+    float: right;
+    margin: -30px 15px 0 0;
+    color: #fff;
+}
+#login-logout a {
+    font-weight: bold;
+    color: #9c9c9c;
+}
+
+footer {
+    padding: 10px 0;
+    border-top: 1px solid #555;
+    margin: 0 0 50px 0;
+}
+
+footer section {
+    width: 960px;
+    margin: 0 auto;
+}
+#footer-nav {
+list-style: none;
+padding: 0;
+}
+#footer-nav li {
+float: left;
+margin-right: 5px;
+}
+
+#third-party-links {
+    list-style: none;
+}
+#third-party-links li {
+    float: left;
+    margin-left: 10px;
+}
